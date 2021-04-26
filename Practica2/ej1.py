@@ -1,23 +1,26 @@
 import vtk
 
+radio=60
+
 class vtkTimerCallback():
-    def __init__(self, steps, actor, iren, posX,velX,posY,velY,reb):
-        self.timer_countX = posX
-        self.timer_countY = posY
-        self.steps = steps
+    def __init__(self, tiempo_simulado, actor, iren, posX,velX,posY,velY,reb,rugos):
+        self.ubicaX = posX
+        self.ubicaY = posY
+        self.tiempo_simulado = tiempo_simulado
         self.actor = actor
         self.iren = iren
         self.timerId = None
         self.velocidadX=velX
         self.velocidadY=velY
         self.rebote=reb
+        self.rugosidad=rugos
 
     def execute(self, obj, event):
-        step = 0
-        while step < self.steps:
-            #print(self.timer_countX)
-            #print(self.actor.GetPosition())
-            self.actor.SetPosition(self.timer_countX, 100,self.timer_countY)
+        tiempo = 0
+        while tiempo < self.tiempo_simulado:
+            #print(self.ubicaX)
+            print(self.actor.GetPosition())
+            self.actor.SetPosition(self.ubicaX, radio,self.ubicaY)
             iren = obj
             self.actor.RotateZ(0.5)
             iren.GetRenderWindow().Render()
@@ -31,9 +34,13 @@ class vtkTimerCallback():
                self.velocidadY= self.velocidadY*-1*self.rebote             
                print(self.velocidadY)
 
-            self.timer_countX += self.velocidadX
-            self.timer_countY += self.velocidadY
-            step += 1
+            self.ubicaX = self.ubicaX + self.velocidadX - 4.9*self.rugosidad
+            self.ubicaY = self.ubicaY + self.velocidadY - 4.9*self.rugosidad
+            
+            self.velocidadX= self.velocidadX-9.81*self.rugosidad
+            self.velocidadY= self.velocidadY-9.81*self.rugosidad
+
+            tiempo += 1
 
             if self.velocidadY<0.0001 and self.velocidadX<0.0001:
                break
@@ -41,7 +48,7 @@ class vtkTimerCallback():
         if self.timerId:
             iren.DestroyTimer(self.timerId)
 
-	
+
 def main():
     colors = vtk.vtkNamedColors()
 
@@ -51,9 +58,10 @@ def main():
     reader.SetFileName(jpgfile)
 
     # Create a sphere
+    
     sphereSource = vtk.vtkSphereSource()
     sphereSource.SetCenter(0.0, 0.0, 0.0)
-    sphereSource.SetRadius(100)
+    sphereSource.SetRadius(radio)
     sphereSource.SetPhiResolution(300)
     sphereSource.SetThetaResolution(300)
 
@@ -88,7 +96,7 @@ def main():
     # Create a pared1
     pared5 = vtk.vtkCubeSource()
     pared5.SetXLength(3000)
-    pared5.SetYLength(50)
+    pared5.SetYLength(radio/2)
     pared5.SetZLength(3000)
     pared5.Update()
 
@@ -153,7 +161,7 @@ def main():
     actor6 = vtk.vtkActor()
     actor6.SetMapper(mapper6)
     actor6.GetProperty().SetColor(1.0, 0.0, 1.0)
-    actor6.SetPosition(0,-50,0)
+    actor6.SetPosition(0,-radio/2,0)
 
     # Setup a renderer, render window, and interactor
     renderer = vtk.vtkRenderer()
@@ -185,7 +193,7 @@ def main():
     renderWindowInteractor.Initialize()
 
     # Sign up to receive TimerEvent
-    cb = vtkTimerCallback(30000, actor1, renderWindowInteractor,0,0.8,0,0.2,0.9)
+    cb = vtkTimerCallback(30000, actor1, renderWindowInteractor,0,100,0,400,0.99,0.2)
     renderWindowInteractor.AddObserver('TimerEvent', cb.execute)
     cb.timerId = renderWindowInteractor.CreateRepeatingTimer(500)
 
