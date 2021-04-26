@@ -160,27 +160,27 @@ def main():
 
     actor2 = vtk.vtkActor()
     actor2.SetMapper(mapper2)
-    actor2.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor2.GetProperty().SetColor(173/255, 114/255, 4/255)
     actor2.SetPosition(0,0,-1500)
 
     actor3 = vtk.vtkActor()
     actor3.SetMapper(mapper3)
-    actor3.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor3.GetProperty().SetColor(173/255, 114/255, 4/255)
     actor3.SetPosition(0,0,1500)
 
     actor4 = vtk.vtkActor()
     actor4.SetMapper(mapper4)
-    actor4.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor4.GetProperty().SetColor(173/255, 114/255, 4/255)
     actor4.SetPosition(-1500,0,0)
 
     actor5 = vtk.vtkActor()
     actor5.SetMapper(mapper5)
-    actor5.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor5.GetProperty().SetColor(173/255, 114/255, 4/255)
     actor5.SetPosition(1500,0,0)
 
     actor6 = vtk.vtkActor()
     actor6.SetMapper(mapper6)
-    actor6.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor6.GetProperty().SetColor(24/255, 173/255, 4/255)
     actor6.SetPosition(0,-radio/2,0)
 
     # Setup a renderer, render window, and interactor
