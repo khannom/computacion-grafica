@@ -214,7 +214,7 @@ def main():
 
     # Sign up to receive TimerEvent
     #tiempo_simulado, actor, window, posicionX, velocidadX, posicionY, velocidadY, rebote ,rugosidad
-    cb = vtkTimerCallback(3000, actor1, renderWindowInteractor,0,1,0,2,0.99,0.00002)
+    cb = vtkTimerCallback(3000, actor1, renderWindowInteractor,0,1,0,2,0.99,0.002)
     renderWindowInteractor.AddObserver('TimerEvent', cb.execute)
     cb.timerId = renderWindowInteractor.CreateRepeatingTimer(500)
 

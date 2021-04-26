@@ -25,7 +25,7 @@ class vtkTimerCallback():
             iren = obj
             self.actor.RotateZ(0.5)
             self.actor.RotateX(0.5*(self.velocidadX)/(self.velocidadX+self.velocidadY))
-            self.actor.RotateY(0.5*(self.velocidadY)/(self.velocidadX+self.velocidadY))
+            self.actor.RotateY(0.5*(self.velocidadY)/(self.velocidadX))
 
             iren.GetRenderWindow().Render()
 
@@ -37,30 +37,19 @@ class vtkTimerCallback():
 
             if self.velocidadX>0:            
                self.ubicaX = self.ubicaX + self.velocidadX*tiempo - 4.9*self.rugosidad*tiempo*tiempo
-               if self.velocidadX > 9.8*self.rugosidad*tiempo:
-                  self.velocidadX= self.velocidadX - 9.8*self.rugosidad*tiempo
-               else:
-                  self.velocidadX=0
+               self.velocidadX= self.velocidadX - 9.81*self.rugosidad*tiempo            
             else:
                self.ubicaX = self.ubicaX + self.velocidadX*tiempo + 4.9*self.rugosidad*tiempo*tiempo
-               if -1*self.velocidadX > 9.8*self.rugosidad*tiempo:
-                  self.velocidadX= self.velocidadX + 9.8*self.rugosidad*tiempo
-               else:
-                  self.velocidadX=0
+               self.velocidadX= self.velocidadX + 9.81*self.rugosidad*tiempo
 
             if self.velocidadY>0:            
                self.ubicaY = self.ubicaY + self.velocidadY*tiempo - 4.9*self.rugosidad*tiempo*tiempo
-               if self.velocidadY > 9.8*self.rugosidad*tiempo:
-                  self.velocidadY= self.velocidadY - 9.8*self.rugosidad*tiempo
-               else:
-                  self.velocidadY=0
+               self.velocidadY= self.velocidadY-9.81*self.rugosidad*tiempo
             else:
                self.ubicaY = self.ubicaY + self.velocidadY*tiempo + 4.9*self.rugosidad*tiempo*tiempo
-               self.velocidadY= self.velocidadY+ 9.8*self.rugosidad*tiempo
-               if -1*self.velocidadY > 9.8*self.rugosidad*tiempo:
-                  self.velocidadY= self.velocidadY + 9.8*self.rugosidad*tiempo
-               else:
-                  self.velocidadY=0
+               self.velocidadY= self.velocidadY+9.81*self.rugosidad*tiempo
+
+            
 
             if abs(self.velocidadY)<0.005 and abs(self.velocidadX)<0.005:
                break
@@ -160,27 +149,27 @@ def main():
 
     actor2 = vtk.vtkActor()
     actor2.SetMapper(mapper2)
-    actor2.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor2.GetProperty().SetColor(173/255, 114/255, 4/255)
     actor2.SetPosition(0,0,-1500)
 
     actor3 = vtk.vtkActor()
     actor3.SetMapper(mapper3)
-    actor3.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor3.GetProperty().SetColor(173/255, 114/255, 4/255)
     actor3.SetPosition(0,0,1500)
 
     actor4 = vtk.vtkActor()
     actor4.SetMapper(mapper4)
-    actor4.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor4.GetProperty().SetColor(173/255, 114/255, 4/255)
     actor4.SetPosition(-1500,0,0)
 
     actor5 = vtk.vtkActor()
     actor5.SetMapper(mapper5)
-    actor5.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor5.GetProperty().SetColor(173/255, 114/255, 4/255)
     actor5.SetPosition(1500,0,0)
 
     actor6 = vtk.vtkActor()
     actor6.SetMapper(mapper6)
-    actor6.GetProperty().SetColor(1.0, 0.0, 1.0)
+    actor6.GetProperty().SetColor(24/255, 173/255, 4/255)
     actor6.SetPosition(0,-radio/2,0)
 
     # Setup a renderer, render window, and interactor
@@ -214,7 +203,7 @@ def main():
 
     # Sign up to receive TimerEvent
     #tiempo_simulado, actor, window, posicionX, velocidadX, posicionY, velocidadY, rebote ,rugosidad
-    cb = vtkTimerCallback(3000, actor1, renderWindowInteractor,0,1,0,2,0.99,0.00002)
+    cb = vtkTimerCallback(3000, actor1, renderWindowInteractor,0,1,0,3,0.99,0.000002)
     renderWindowInteractor.AddObserver('TimerEvent', cb.execute)
     cb.timerId = renderWindowInteractor.CreateRepeatingTimer(500)
 
