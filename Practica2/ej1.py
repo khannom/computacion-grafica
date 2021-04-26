@@ -3,10 +3,10 @@ import vtk
 radio=60
 
 class vtkTimerCallback():
-    def __init__(self, tiempo_simulado, actor, iren, posX,velX,posY,velY,reb,rugos):
-        self.ubicaX = posX
-        self.ubicaY = posY
-        self.tiempo_simulado = tiempo_simulado
+    def __init__(self, steps, actor, iren, posX,velX,posY,velY,reb,rugos):
+        self.timer_countX = posX
+        self.timer_countY = posY
+        self.steps = steps
         self.actor = actor
         self.iren = iren
         self.timerId = None
@@ -16,11 +16,11 @@ class vtkTimerCallback():
         self.rugosidad=rugos
 
     def execute(self, obj, event):
-        tiempo = 0
-        while tiempo < self.tiempo_simulado:
-            #print(self.ubicaX)
-            print(self.actor.GetPosition())
-            self.actor.SetPosition(self.ubicaX, radio,self.ubicaY)
+        step = 0
+        while step < self.steps:
+            #print(self.timer_countX)
+            #print(self.actor.GetPosition())
+            self.actor.SetPosition(self.timer_countX, radio,self.timer_countY)
             iren = obj
             self.actor.RotateZ(0.5)
             iren.GetRenderWindow().Render()
@@ -34,13 +34,9 @@ class vtkTimerCallback():
                self.velocidadY= self.velocidadY*-1*self.rebote             
                print(self.velocidadY)
 
-            self.ubicaX = self.ubicaX + self.velocidadX - 4.9*self.rugosidad
-            self.ubicaY = self.ubicaY + self.velocidadY - 4.9*self.rugosidad
-            
-            self.velocidadX= self.velocidadX-9.81*self.rugosidad
-            self.velocidadY= self.velocidadY-9.81*self.rugosidad
-
-            tiempo += 1
+            self.timer_countX = self.timer_countX + self.velocidadX - self.rugosidad
+            self.timer_countY = self.timer_countY + self.velocidadY - self.rugosidad
+            step += 1
 
             if self.velocidadY<0.0001 and self.velocidadX<0.0001:
                break
@@ -193,7 +189,7 @@ def main():
     renderWindowInteractor.Initialize()
 
     # Sign up to receive TimerEvent
-    cb = vtkTimerCallback(30000, actor1, renderWindowInteractor,0,100,0,400,0.99,0.2)
+    cb = vtkTimerCallback(30000, actor1, renderWindowInteractor,0,1.5,0,0.9,0.99,0.01)
     renderWindowInteractor.AddObserver('TimerEvent', cb.execute)
     cb.timerId = renderWindowInteractor.CreateRepeatingTimer(500)
 
