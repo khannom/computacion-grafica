@@ -1,20 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<script src="../../threejs/three.min.js"></script>
+		<script src="../../threejs/OrbitControls.js"></script>
+		<script>
+			const troncoTexture = new THREE.TextureLoader().load(
+				"textures/tronco.jpg"
+			);
 
-    <!--<script src="three.min.js"> </script> 
-    <script src="OrbitControls.js"> </script> 
-    <script src="dat.gui.min.js"></script>
-    -->
-    <script type='module' src='test.js'>
-    
-    </script>    
+			getRandomArbitrary = (min, max) => {
+				return Math.random() * (max - min) + min;
+			};
 
-</body>
+			var crearArbol = (x, z, scene) => {
+				var troncoGeometry = new THREE.CylinderGeometry(3, 3, 50, 20);
+				var troncoMaterial = new THREE.MeshPhongMaterial({
+					map: troncoTexture,
+				});
+				/* var troncoMaterial = new THREE.MeshBasicMaterial({color: 0x422904}) */
+				var tronco = new THREE.Mesh(troncoGeometry, troncoMaterial);
+				tronco.castShadow = true;
+				tronco.position.x = x;
+				tronco.position.y = 25;
+				tronco.position.z = z;
+
+				const hojaTexture = new THREE.TextureLoader().load(
+					"textures/cesped2.jpg"
+				);
+				var hojaGeometry1 = new THREE.SphereGeometry(15, 20, 20);
+				var hojaMaterial1 = new THREE.MeshBasicMaterial({
+					map: hojaTexture,
+				});
+
+				var hoja1 = new THREE.Mesh(hojaGeometry1, hojaMaterial1);
+				hoja1.position.x = x;
+				hoja1.position.y = 60;
+				hoja1.position.z = z;
+				hoja1.castShadow = true;
+
+				var hoja2 = new THREE.Mesh(hojaGeometry1, hojaMaterial1);
+				hoja2.position.x = x;
+				hoja2.position.y = 60;
+				hoja2.position.z = z + 15;
+				hoja2.castShadow = true;
+
+				var hoja3 = new THREE.Mesh(hojaGeometry1, hojaMaterial1);
+				hoja3.position.x = x;
+				hoja3.position.y = 60;
+				hoja3.position.z = z - 15;
+				hoja3.castShadow = true;
+
+				var hoja4 = new THREE.Mesh(hojaGeometry1, hojaMaterial1);
+				hoja4.position.x = x + 15;
+				hoja4.position.y = 60;
+				hoja4.position.z = z;
+				hoja4.castShadow = true;
+
+				var hoja5 = new THREE.Mesh(hojaGeometry1, hojaMaterial1);
+				hoja5.position.x = x - 15;
+				hoja5.position.y = 60;
+				hoja5.position.z = z;
+				hoja5.castShadow = true;
+
+				var hoja6 = new THREE.Mesh(hojaGeometry1, hojaMaterial1);
+				hoja6.position.x = x;
+				hoja6.position.y = 75;
+				hoja6.position.z = z;
+				hoja6.castShadow = true;
+
+				scene.add(tronco);
+				scene.add(hoja1);
+				scene.add(hoja2);
+				scene.add(hoja3);
+				scene.add(hoja4);
+				scene.add(hoja5);
+				scene.add(hoja6);
+			};
+
+			/* Casa */
+			const texture = new THREE.TextureLoader().load(
+				"textures/casa.jpg"
+			);
+			var geometry = new THREE.BoxGeometry(20, 20, 20);
+			var material = new THREE.MeshPhongMaterial({ map: texture });
+			/* var material = new THREE.MeshBasicMaterial( {color:0xebf090} ); */
+			var cube = new THREE.Mesh(geometry, material);
+			cube.position.y = 10;
+			cube.castShadow = true;
+
+			/* Techo */
+			const roofTexture = new THREE.TextureLoader().load(
+				"textures/roof.jpeg"
+			);
+			var roofGeometry = new THREE.ConeGeometry(16, 14.14, 32);
+			var roofMaterial = new THREE.MeshPhongMaterial({
+				map: roofTexture,
+			});
+			/* var roofMaterial = new THREE.MeshBasicMaterial( {color: 0xeb1c2d} ); */
+			var roof = new THREE.Mesh(roofGeometry, roofMaterial);
+			roof.position.y = 27.07;
+			roof.castShadow = true;
+
+			/* Windows */
+			const windowTexture = new THREE.TextureLoader().load(
+				"textures/window.jpg"
+			);
+			var windowGeometry = new THREE.BoxGeometry(15, 7, 1);
+			var windowMaterial = new THREE.MeshPhongMaterial({
+				map: windowTexture,
+			});
+			/* var windowMaterial = new THREE.MeshBasicMaterial( {color: 0x79e5ed}) */
+			var window1 = new THREE.Mesh(windowGeometry, windowMaterial);
+			window1.position.y = 10;
+			window1.position.z = 10;
+
+			var window2 = new THREE.Mesh(windowGeometry, windowMaterial);
+			window2.position.y = 10;
+			window2.position.z = -10;
+
+			/* Door */
+			const doorTexture = new THREE.TextureLoader().load(
+				"textures/door.jpg"
+			);
+			var doorGeometry = new THREE.BoxGeometry(1, 15, 7);
+			var doorMaterial = new THREE.MeshPhongMaterial({
+				map: doorTexture,
+			});
+			/* var doorMaterial = new THREE.MeshBasicMaterial({color: 0x572e00}) */
+			var door = new THREE.Mesh(doorGeometry, doorMaterial);
+			door.position.x = 10;
+			door.position.y = 7.5;
+
+			/* Chapa */
+			var chapaGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+			var chapaMaterial = new THREE.MeshBasicMaterial({
+				color: 0xf8ff2e,
+			});
+			var chapa = new THREE.Mesh(chapaGeometry, chapaMaterial);
+			chapa.position.x = 10.5;
+			chapa.position.y = 7.5;
+			chapa.position.z = 2;
+
+			/* Pasto */
+			const pastoTexture = new THREE.TextureLoader().load(
+				"textures/cesped.jpg"
+			);
+			var pastoGeometry = new THREE.PlaneGeometry(1000, 1000, 10);
+			var pastoMaterial = new THREE.MeshPhongMaterial({
+				map: pastoTexture,
+			});
+			/* var pastoMaterial = new THREE.MeshPhongMaterial( {color: 0x999999} ); */
+			var pasto = new THREE.Mesh(pastoGeometry, pastoMaterial);
+			pasto.rotation.x = Math.PI * -0.5;
+			pasto.receiveShadow = true;
+
+			/* Sol */
+			const sunTexture = new THREE.TextureLoader().load(
+				"textures/sol.jpg"
+			);
+			var sunGeometry = new THREE.SphereGeometry(30, 20, 20);
+			var sunMaterial = new THREE.MeshPhongMaterial({ map: sunTexture });
+			var sun = new THREE.Mesh(sunGeometry, sunMaterial);
+			sun.position.y = 150;
+			const sunLight = new THREE.DirectionalLight(0xeefc68, 1.5);
+			sunLight.target.position.set(0, 0, 0);
+			sunLight.castShadow = true;
+
+			// camera //////////////////////////////////////////////////
+			var camera = new THREE.PerspectiveCamera(
+				30,
+				window.innerWidth / window.innerHeight
+			);
+			camera.position.z = 50;
+			camera.position.y = 50;
+
+			const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+
+			/* Scene */
+			/* Objects */
+			var scene = new THREE.Scene();
+			scene.background = new THREE.Color(0x000000);
+			scene.add(cube);
+			scene.add(ambientLight);
+			scene.add(roof);
+			scene.add(window1);
+			scene.add(window2);
+			scene.add(door);
+			scene.add(chapa);
+			scene.add(pasto);
+			scene.add(sun);
+
+			for (var i = 0; i < 30; i++) {
+				crearArbol(
+					getRandomArbitrary(-500, 500),
+					getRandomArbitrary(-500, 500),
+					scene
+				);
+			}
+
+			/* Lights */
+			scene.add(sunLight);
+			scene.add(sunLight.target);
+
+			/* const axesHelper = new THREE.AxesHelper( 100 );
+            scene.add( axesHelper ); */
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+			renderer.shadowMapEnabled = true;
+			renderer.shadowMap.Type = THREE.PCFShadowMap;
+
+			var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+			controls.enableDamping = true;
+			controls.dampingFactor = 0.4;
+
+			// animation //////////////////////////////////////////////////
+			var t = 0;
+			var f = 350;
+			var posX = f * Math.sin(t);
+			var posZ = f * Math.cos(t);
+			var animate = () => {
+				requestAnimationFrame(animate);
+				t += 0.01;
+				sun.rotation.y += 0.01;
+				posX = f * Math.sin(t);
+				posZ = f * Math.cos(t);
+				sun.position.x = posX;
+				sun.position.z = posZ;
+				sunLight.position.set(posX, 150, posZ);
+
+				controls.update();
+				renderer.render(scene, camera);
+			};
+			animate();
+		</script>
+	</body>
 </html>
